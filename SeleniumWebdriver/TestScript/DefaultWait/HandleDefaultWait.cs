@@ -1,18 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using SeleniumWebdriver.ComponentHelper;
-using SeleniumWebdriver.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using SeleniumWebdriver.ComponentHelper;
+using SeleniumWebdriver.Settings;
 
 namespace SeleniumWebdriver.TestScript.DefaultWait
 {
     [TestClass]
-   public class HandleDefaultWait
+    public class HandleDefaultWait
     {
         [TestMethod]
         public void TestDefaultWait()
@@ -22,31 +22,29 @@ namespace SeleniumWebdriver.TestScript.DefaultWait
             TextBoxHelper.TypeInTextBox(By.Id("Bugzilla_login"), ObjectRepository.Config.GetUsername());
             TextBoxHelper.TypeInTextBox(By.Id("Bugzilla_password"), ObjectRepository.Config.GetPassword());
             ButtonHelper.ClickButton(By.Id("log_in"));
+            LinkHelper.ClickLink(By.LinkText("Testng"));
             ObjectRepository.Driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(1));
 
             GenericHelper.WaitForWebElement(By.Id("bug_severity"), TimeSpan.FromSeconds(50));
-            GenericHelper.WaitForWebElementInPage(By.Id("bug_severity"), TimeSpan.FromSeconds(50));
-
+            IWebElement ele = GenericHelper.WaitForWebElementInPage(By.Id("bug_severity"), TimeSpan.FromSeconds(50));
 
             DefaultWait<IWebElement> wait = new DefaultWait<IWebElement>(ObjectRepository.Driver.FindElement(By.Id("bug_severity")));
             wait.PollingInterval = TimeSpan.FromMilliseconds(200);
             wait.Timeout = TimeSpan.FromSeconds(50);
             wait.IgnoreExceptionTypes(typeof(NoSuchElementException), typeof(ElementNotVisibleException));
-            Console.WriteLine("After wait: {0}", wait.Until(changeofValue()));
-
+            Console.WriteLine("After wait : {0}", wait.Until(changeofvalue()));
         }
-        private Func<IWebElement, string> changeofValue()
+
+        private Func<IWebElement, string> changeofvalue()
         {
             return ((x) =>
             {
-                Console.WriteLine("Waiting For Value To Change");
+                Console.WriteLine("Waiting for value change");
                 SelectElement select = new SelectElement(x);
-                if (select.SelectedOption.Text.Equals("critical")) ;
+                if (select.SelectedOption.Text.Equals("major"))
+                    return select.SelectedOption.Text;
                 return null;
             });
         }
-
- 
-
     }
 }
