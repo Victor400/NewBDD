@@ -89,8 +89,7 @@ namespace SeleniumWebdriver.BaseClasses
 
             NavigationHelper.NavigateToUrl(ObjectRepository.Config.GetWebsite());
             ObjectRepository.Driver.Manage()
-                .Timeouts()
-                .SetPageLoadTimeout(TimeSpan.FromSeconds(ObjectRepository.Config.GetPageLoadTimeOut()));
+                .Timeouts().(TimeSpan.FromSeconds(ObjectRepository.Config.GetPageLoadTimeOut()));
 
             ObjectRepository.Driver.Manage()
                 .Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(ObjectRepository.Config.GetElementLoadTimeOut()));
